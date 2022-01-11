@@ -12,5 +12,8 @@ Contacts:
 Telegram: https://t.me/Andrey_Polegaev
 
 Car - Engine: One-To-One relationships. 
+
 Car - Driver: Many-To-Many relationships with join table history-owner.
-![alt text](images/db.png)
+
+Advertisements depend on bode, users, mark, photo depends on advertisements.
+![alt text](images/db1.png)

@@ -21,5 +21,10 @@
         <mapping class="entities.Driver"/>
         <mapping class="entities.Engine"/>
         <mapping class="entities.HistoryOwner"/>
+        <mapping class="entitiessecond.Advertisement"/>
+        <mapping class="entitiessecond.Body"/>
+        <mapping class="entitiessecond.Mark"/>
+        <mapping class="entitiessecond.Photo"/>
+        <mapping class="entitiessecond.Users"/>
     </session-factory>
 </hibernate-configuration>
