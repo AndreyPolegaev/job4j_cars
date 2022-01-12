@@ -20,7 +20,6 @@
         <mapping class="entities.Car"/>
         <mapping class="entities.Driver"/>
         <mapping class="entities.Engine"/>
-        <mapping class="entities.HistoryOwner"/>
         <mapping class="entitiessecond.Advertisement"/>
         <mapping class="entitiessecond.Body"/>
         <mapping class="entitiessecond.Mark"/>

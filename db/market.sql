@@ -30,10 +30,14 @@ create table if not exists users
 create table if not exists advertisement
 (
     id   serial primary key,
+    created timestamp,
     users_id int references users(id),
     description text,
     mark_id int references mark(id) not null,
     body_id int references body(id) not null,
     sold boolean not null
 );
+
+drop table advertisement;
+drop table photo;
 
