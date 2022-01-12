@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "car", schema = "public", catalog = "car")
@@ -30,11 +28,7 @@ public class Car {
 
     /** при удалении автомобиля, водитель не удалится */
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "history_owner",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "driver_id")
-    )
-    private List<Driver> drivers = new ArrayList<>();
+    private Set<Driver> drivers = new HashSet<>();
 
     public Car(String name, Engine engine) {
         this.name = name;
