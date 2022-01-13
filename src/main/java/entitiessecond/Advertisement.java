@@ -76,8 +76,11 @@ public class Advertisement {
     public String toString() {
         return "Advertisement{"
                 + "id=" + id
+                + ", created=" + created
                 + ", description='" + description + '\''
                 + ", sold=" + sold
+                + ", mark=" + mark
+                + ", body=" + body
                 + '}';
     }
 }
