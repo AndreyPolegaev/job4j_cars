@@ -28,6 +28,10 @@ public class Car {
 
     /** при удалении автомобиля, водитель не удалится */
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(name = "history_owner",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "driver_id")
+    )
     private Set<Driver> drivers = new HashSet<>();
 
     public Car(String name, Engine engine) {

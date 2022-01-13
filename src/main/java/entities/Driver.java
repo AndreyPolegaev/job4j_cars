@@ -24,14 +24,17 @@ public class Driver {
 
     /** при удалении воителя, автомобиль не удалится */
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private Set<Car> cars = new HashSet<>();
-
-    public void addCar(Car car) {
-        cars.add(car);
-    }
+    @JoinTable(name = "history_owner",
+            joinColumns = @JoinColumn(name = "driver_id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id")
+    )    private Set<Car> cars = new HashSet<>();
 
     public Driver(String name) {
         this.name = name;
+    }
+
+    public void addCar(Car car) {
+        cars.add(car);
     }
 
     @Override

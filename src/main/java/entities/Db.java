@@ -2,33 +2,69 @@ package entities;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.Transaction;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import java.util.function.Function;
 
-/** пример работы с обЪектами */
+/** БД, шаблон Wrapper */
+public class Db implements AutoCloseable, Store{
 
-public class Db {
-    public static void main(String[] args) {
-        SessionFactory sessionfactory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .buildSessionFactory();
-        Session session = null;
+    private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+            .configure().build();
+    private final SessionFactory sf = new MetadataSources(registry)
+            .buildMetadata().buildSessionFactory();
 
+    private static final class Lazy {
+        private static final Db INST = new Db();
+    }
+
+    public static Db instOf() {
+        return Lazy.INST;
+    }
+
+    private <T> T tx(Function<Session, T> command) {
+        Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
         try {
-            session = sessionfactory.openSession();
-            session.getTransaction().begin();
-
-            Engine engine1 = new Engine("123-765-234");
-            Car car1 = new Car("BMW", engine1);
-            Driver driver1 = new Driver("Andrey");
-            car1.addDriver(driver1);
-            session.persist(car1);
-
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
         } finally {
             session.close();
-            sessionfactory.close();
         }
+    }
+
+    @Override
+    public void saveCar(Car car) {
+        tx(session -> {
+            session.persist(car);
+            return car;
+        });
+    }
+
+    @Override
+    public void saveEngine(Engine en) {
+        tx(session -> {
+            session.save(en);
+            return en;
+        });
+    }
+
+    @Override
+    public void saveDriver(Driver dr) {
+        tx(session -> {
+            session.save(dr);
+            return dr;
+        });
+    }
+
+    @Override
+    public void close() {
+        StandardServiceRegistryBuilder.destroy(registry);
     }
 }
